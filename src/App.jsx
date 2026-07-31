@@ -536,8 +536,8 @@ export default function MusicHistoryTimeline() {
   const [touchStartX, setTouchStartX] = useState(null);
   const [initialStart, setInitialStart] = useState(0);
 
-  // Wikipedia integration state
-  const [wikiSuggestion, setWikiSuggestion] = useState(null);
+  // Wikipedia integration state (Now an array to hold multiple suggestions)
+  const [wikiSuggestions, setWikiSuggestions] = useState([]);
   const [isSearchingWiki, setIsSearchingWiki] = useState(false);
   
   const [groupColors, setGroupColors] = useState({
@@ -653,7 +653,7 @@ export default function MusicHistoryTimeline() {
       return;
     }
     setIsSearchingWiki(true);
-    setWikiSuggestion(null);
+    setWikiSuggestions([]);
 
     try {
       const query = encodeURIComponent(formData.title.trim());
@@ -661,16 +661,14 @@ export default function MusicHistoryTimeline() {
       const data = await response.json();
 
       if (data.query && data.query.search && data.query.search.length > 0) {
-        const topResult = data.query.search[0];
-        const wikiTitle = topResult.title;
-        const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(wikiTitle.replace(/ /g, '_'))}`;
-        const cleanSnippet = topResult.snippet.replace(/<\/?[^>]+(>|$)/g, "");
-
-        setWikiSuggestion({
-          title: wikiTitle,
-          url: wikiUrl,
-          snippet: cleanSnippet
-        });
+        // Grab up to the top 4 results for disambiguation
+        const topResults = data.query.search.slice(0, 4).map(res => ({
+          title: res.title,
+          url: `https://en.wikipedia.org/wiki/${encodeURIComponent(res.title.replace(/ /g, '_'))}`,
+          snippet: res.snippet.replace(/<\/?[^>]+(>|$)/g, "")
+        }));
+        
+        setWikiSuggestions(topResults);
       } else {
         alert("No matching Wikipedia article found.");
       }
@@ -804,7 +802,7 @@ export default function MusicHistoryTimeline() {
     setItems([...items, newItem]);
     setHasUnsavedChanges(true);
     setFormData({ title: '', startYear: '', endYear: '', description: '', link: '', group: '2' });
-    setWikiSuggestion(null); // Clear suggestion on submit
+    setWikiSuggestions([]); // Clear suggestions on submit
   };
 
   const handleEditSubmit = (e) => {
@@ -847,7 +845,7 @@ export default function MusicHistoryTimeline() {
       <div style={{ flex: isMobile ? '1 1 auto' : '0 0 250px', width: isMobile ? '100%' : 'auto', display: 'flex', flexDirection: 'column', gap: '15px' }}>
         
         {/* --- STUDENT TOOLS: Load & Save (Always visible) --- */}
-        <div style={{ backgroundColor: '#fff', border: '2px solid #007bff', borderRadius: '6px', padding: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+        <div style={{ backgroundColor: '#fff', border: '2px solid #007bff', borderRadius: '6px', padding: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', order: 1 }}>
           <h4 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #ddd', paddingBottom: '5px', color: '#007bff' }}>Student Dashboard</h4>
           
           <label style={{ display: 'block', padding: '15px', border: '2px dashed #ccc', borderRadius: '6px', textAlign: 'center', cursor: 'pointer', backgroundColor: '#f8f9fa', marginBottom: '15px', transition: 'background-color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e9ecef'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#f8f9fa'}>
@@ -880,7 +878,7 @@ export default function MusicHistoryTimeline() {
         {isMobile && (
           <button 
             onClick={() => setShowControls(!showControls)}
-            style={{ width: '100%', padding: '10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+            style={{ width: '100%', padding: '10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', order: 2 }}
           >
             {showControls ? '▲ Hide Navigation & Filters' : '▼ Show Navigation & Filters'}
           </button>
@@ -889,8 +887,8 @@ export default function MusicHistoryTimeline() {
         {/* --- CONTROLS (Hidden on Mobile unless toggled) --- */}
         {(!isMobile || showControls) && (
           <>
-            {/* Timelines (Visibility & Color Settings) MOVED UP */}
-            <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px' }}>
+            {/* Timelines: On Mobile it's below the toggle (order 3). On Desktop it's at the bottom (order 4) */}
+            <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px', order: isMobile ? 3 : 4 }}>
               <h4 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Timelines</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {groups.map(g => (
@@ -905,8 +903,8 @@ export default function MusicHistoryTimeline() {
               </div>
             </div>
 
-            {/* Bounds & Navigation Panel MOVED DOWN (closer to timeline canvas) */}
-            <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px' }}>
+            {/* Navigator: On Mobile it's at the bottom (order 4). On Desktop it's above Timelines (order 3) */}
+            <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px', order: isMobile ? 4 : 3 }}>
               <h4 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Navigator</h4>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
@@ -1188,38 +1186,45 @@ export default function MusicHistoryTimeline() {
               </button>
             </div>
 
-            {/* Wikipedia Suggestion Prompt Box */}
-            {wikiSuggestion && (
-              <div style={{ backgroundColor: '#e7f3ff', border: '1px solid #b3d7ff', padding: '12px', borderRadius: '6px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div>
-                  <strong>Found Wikipedia Match:</strong> {wikiSuggestion.title}
+            {/* Wikipedia Suggestion Prompt Box (Multiple Results) */}
+            {wikiSuggestions && wikiSuggestions.length > 0 && (
+              <div style={{ backgroundColor: '#e7f3ff', border: '1px solid #b3d7ff', padding: '12px', borderRadius: '6px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '-5px', color: '#0056b3' }}>
+                  Found Wikipedia matches. Choose one:
                 </div>
-                <div style={{ color: '#555', lineHeight: '1.4' }}>
-                  {wikiSuggestion.snippet}...
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      setFormData(prev => ({
-                        ...prev,
-                        link: wikiSuggestion.url,
-                        description: prev.description ? prev.description : wikiSuggestion.snippet
-                      }));
-                      setWikiSuggestion(null);
-                    }}
-                    style={{ padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                  >
-                    ✓ Yes, Apply Link & Summary
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => setWikiSuggestion(null)}
-                    style={{ padding: '5px 10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Dismiss
-                  </button>
-                </div>
+                
+                {wikiSuggestions.map((suggestion, index) => (
+                  <div key={index} style={{ borderBottom: index < wikiSuggestions.length - 1 ? '1px solid #b3d7ff' : 'none', paddingBottom: index < wikiSuggestions.length - 1 ? '10px' : '0' }}>
+                    <div style={{ fontSize: '14px', marginBottom: '4px' }}>
+                      <strong>{suggestion.title}</strong>
+                    </div>
+                    <div style={{ color: '#444', lineHeight: '1.4', marginBottom: '8px' }}>
+                      {suggestion.snippet}...
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          link: suggestion.url,
+                          description: prev.description ? prev.description : suggestion.snippet
+                        }));
+                        setWikiSuggestions([]);
+                      }}
+                      style={{ padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      ✓ Use This Link & Summary
+                    </button>
+                  </div>
+                ))}
+                
+                <button 
+                  type="button" 
+                  onClick={() => setWikiSuggestions([])}
+                  style={{ padding: '6px 10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '4px' }}
+                >
+                  Dismiss All
+                </button>
               </div>
             )}
             
