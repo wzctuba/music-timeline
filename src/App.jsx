@@ -10,6 +10,518 @@ const defaultItems = [
   { id: 4, group: 1, title: 'Classical', startYear: 1750, endYear: 1820, description: 'The Classical era of Western art music.', link: '' },
 ];
 
+const defaultEvents = [
+  // --- 500–1400 World Events ---
+  {
+    id: 5,
+    group: 4,
+    title: "Rule of Saint Benedict",
+    startYear: 540,
+    endYear: 540,
+    description: "Saint Benedict authored a rule that became the foundational guidebook for Western monasticism and scholarship.",
+    link: "https://en.wikipedia.org/wiki/Rule_of_Saint_Benedict",
+    category: "Religion & Culture"
+  },
+  {
+    id: 6,
+    group: 4,
+    title: "Charlemagne Crowned Emperor",
+    startYear: 800,
+    endYear: 800,
+    description: "Pope Leo III crowned Charlemagne Emperor of the Romans, sparking the Carolingian Renaissance.",
+    link: "https://en.wikipedia.org/wiki/Charlemagne",
+    category: "Politics & Empire"
+  },
+  {
+    id: 7,
+    group: 4,
+    title: "East–West Schism",
+    startYear: 1054,
+    endYear: 1054,
+    description: "The formal division that split medieval Christendom into the Catholic and Orthodox Churches.",
+    link: "https://en.wikipedia.org/wiki/East%E2%80%93West_Schism",
+    category: "Religion & Culture"
+  },
+  {
+    id: 8,
+    group: 4,
+    title: "Norman Conquest of England",
+    startYear: 1066,
+    endYear: 1066,
+    description: "William of Normandy defeated King Harold at the Battle of Hastings, altering English institutions and language.",
+    link: "https://en.wikipedia.org/wiki/Norman_Conquest",
+    category: "War & Conquest"
+  },
+  {
+    id: 9,
+    group: 4,
+    title: "Magna Carta",
+    startYear: 1215,
+    endYear: 1215,
+    description: "King John was forced to seal a charter limiting monarchical power and establishing constitutional principles.",
+    link: "https://en.wikipedia.org/wiki/Magna_Carta",
+    category: "Law & Governance"
+  },
+  {
+    id: 10,
+    group: 4,
+    title: "Hundred Years' War",
+    startYear: 1337,
+    endYear: 1453,
+    description: "A conflict between England and France that transformed European warfare and national identity.",
+    link: "https://en.wikipedia.org/wiki/Hundred_Years%27_War",
+    category: "War & Conquest"
+  },
+  {
+    id: 11,
+    group: 4,
+    title: "The Black Death",
+    startYear: 1346,
+    endYear: 1353,
+    description: "A catastrophic pandemic that swept across western Europe, wiping out roughly 30 to 60 percent of the population.",
+    link: "https://en.wikipedia.org/wiki/Black_Death",
+    category: "Society & Plague"
+  },
+
+  // --- 1400–1600 World Events ---
+  {
+    id: 12,
+    group: 4,
+    title: "Gutenberg Printing Press",
+    startYear: 1440,
+    endYear: 1440,
+    description: "Johannes Gutenberg invented movable-type printing in Europe, revolutionizing the spread of literature and literacy.",
+    link: "https://en.wikipedia.org/wiki/Printing_press",
+    category: "Science & Innovation"
+  },
+  {
+    id: 13,
+    group: 4,
+    title: "Fall of Constantinople",
+    startYear: 1453,
+    endYear: 1453,
+    description: "The Ottoman Empire captured Constantinople, ending the Byzantine Empire and driving Greek scholars west.",
+    link: "https://en.wikipedia.org/wiki/Fall_of_Constantinople",
+    category: "War & Conquest"
+  },
+  {
+    id: 14,
+    group: 4,
+    title: "Columbus Reaches the Americas",
+    startYear: 1492,
+    endYear: 1492,
+    description: "Christopher Columbus landed in the Caribbean, initiating widespread European exploration and colonization.",
+    link: "https://en.wikipedia.org/wiki/Voyages_of_Christopher_Columbus",
+    category: "Exploration"
+  },
+  {
+    id: 15,
+    group: 4,
+    title: "da Vinci Paints Mona Lisa",
+    startYear: 1503,
+    endYear: 1519,
+    description: "Leonardo da Vinci created his iconic portrait during the High Renaissance in Florence.",
+    link: "https://en.wikipedia.org/wiki/Mona_Lisa",
+    category: "Arts & Culture"
+  },
+  {
+    id: 16,
+    group: 4,
+    title: "Sistine Chapel Ceiling",
+    startYear: 1508,
+    endYear: 1512,
+    description: "Michelangelo painted the frescoes on the vault of the Sistine Chapel in Rome.",
+    link: "https://en.wikipedia.org/wiki/Sistine_Chapel_ceiling",
+    category: "Arts & Culture"
+  },
+  {
+    id: 17,
+    group: 4,
+    title: "Protestant Reformation",
+    startYear: 1517,
+    endYear: 1517,
+    description: "Martin Luther published his 95 Theses, sparking the religious schism across Western Europe.",
+    link: "https://en.wikipedia.org/wiki/Protestant_Reformation",
+    category: "Religion & Culture"
+  },
+  {
+    id: 18,
+    group: 4,
+    title: "First Circumnavigation of Globe",
+    startYear: 1519,
+    endYear: 1522,
+    description: "The Magellan-Elcano expedition completed the first documented voyage across all meridians around the Earth.",
+    link: "https://en.wikipedia.org/wiki/Magellan_expedition",
+    category: "Exploration"
+  },
+  {
+    id: 19,
+    group: 4,
+    title: "Copernican Heliocentrism",
+    startYear: 1543,
+    endYear: 1543,
+    description: "Nicolaus Copernicus published his theory that the Earth and planets revolve around the Sun.",
+    link: "https://en.wikipedia.org/wiki/De_revolutionibus_orbium_coelestium",
+    category: "Science & Innovation"
+  },
+
+  // --- 1600–1750 World Events ---
+  {
+    id: 20,
+    group: 4,
+    title: "Founding of Jamestown",
+    startYear: 1607,
+    endYear: 1607,
+    description: "The first permanent English settlement in North America was established in Virginia.",
+    link: "https://en.wikipedia.org/wiki/Jamestown,_Virginia",
+    category: "Exploration & Colonization"
+  },
+  {
+    id: 21,
+    group: 4,
+    title: "Kepler's Planetary Laws",
+    startYear: 1609,
+    endYear: 1609,
+    description: "Johannes Kepler published Astronomia Nova, detailing his first two laws of planetary motion.",
+    link: "https://en.wikipedia.org/wiki/Kepler%27s_laws_of_planetary_motion",
+    category: "Science & Innovation"
+  },
+  {
+    id: 22,
+    group: 4,
+    title: "King James Bible Published",
+    startYear: 1611,
+    endYear: 1611,
+    description: "An English translation of the Bible was published, profoundly shaping the English language and literature.",
+    link: "https://en.wikipedia.org/wiki/Authorized_King_James_Version",
+    category: "Religion & Culture"
+  },
+  {
+    id: 23,
+    group: 4,
+    title: "Thirty Years' War",
+    startYear: 1618,
+    endYear: 1648,
+    description: "A devastating war across Central Europe originating as a Catholic-Protestant conflict that reshaped geopolitical borders.",
+    link: "https://en.wikipedia.org/wiki/Thirty_Years%27_War",
+    category: "War & Conquest"
+  },
+  {
+    id: 24,
+    group: 4,
+    title: "English Civil War",
+    startYear: 1642,
+    endYear: 1651,
+    description: "A series of armed conflicts between Parliamentarians and Royalists over the governance of England.",
+    link: "https://en.wikipedia.org/wiki/English_Civil_War",
+    category: "War & Conquest"
+  },
+  {
+    id: 25,
+    group: 4,
+    title: "Newton's Principia",
+    startYear: 1687,
+    endYear: 1687,
+    description: "Isaac Newton published Principia Mathematica, establishing the laws of motion and universal gravitation.",
+    link: "https://en.wikipedia.org/wiki/Philosophi%C3%A6_Naturalis_Principia_Mathematica",
+    category: "Science & Innovation"
+  },
+
+  // --- 1750–1820 World Events ---
+  {
+    id: 26,
+    group: 4,
+    title: "Seven Years' War",
+    startYear: 1756,
+    endYear: 1763,
+    description: "A global conflict involving most European great powers, fought across Europe, the Americas, and India.",
+    link: "https://en.wikipedia.org/wiki/Seven_Years%27_War",
+    category: "War & Conquest"
+  },
+  {
+    id: 27,
+    group: 4,
+    title: "Declaration of Independence",
+    startYear: 1776,
+    endYear: 1776,
+    description: "The thirteen American colonies declared independence from British rule, establishing the United States.",
+    link: "https://en.wikipedia.org/wiki/United_States_Declaration_of_Independence",
+    category: "Law & Governance"
+  },
+  {
+    id: 28,
+    group: 4,
+    title: "US Constitution Signed",
+    startYear: 1787,
+    endYear: 1787,
+    description: "The Constitutional Convention in Philadelphia drafted and signed the foundational law of the United States federal government.",
+    link: "https://en.wikipedia.org/wiki/United_States_Constitution",
+    category: "Law & Governance"
+  },
+  {
+    id: 29,
+    group: 4,
+    title: "French Revolution",
+    startYear: 1789,
+    endYear: 1799,
+    description: "A period of radical political and societal transformation in France that abolished absolute monarchy and feudal privileges.",
+    link: "https://en.wikipedia.org/wiki/French_Revolution",
+    category: "Politics & Revolution"
+  },
+  {
+    id: 30,
+    group: 4,
+    title: "Napoleonic Wars",
+    startYear: 1803,
+    endYear: 1815,
+    description: "A series of major global conflicts led by Napoleon I against fluctuating European coalitions.",
+    link: "https://en.wikipedia.org/wiki/Napoleonic_Wars",
+    category: "War & Conquest"
+  },
+  {
+    id: 31,
+    group: 4,
+    title: "Battle of Waterloo",
+    startYear: 1815,
+    endYear: 1815,
+    description: "The Seventh Coalition defeated Napoleon's French army, ending the Napoleonic Wars and his imperial reign.",
+    link: "https://en.wikipedia.org/wiki/Battle_of_Waterloo",
+    category: "War & Conquest"
+  },
+
+  // --- Influential People (Group 6) ---
+  {
+    id: 32,
+    group: 6,
+    title: "Charlemagne",
+    startYear: 742,
+    endYear: 814,
+    description: "King of the Franks and Lombards who united much of Western Europe and was crowned Holy Roman Emperor.",
+    link: "https://en.wikipedia.org/wiki/Charlemagne",
+    category: "Influential People"
+  },
+  {
+    id: 33,
+    group: 6,
+    title: "William the Conqueror",
+    startYear: 1028,
+    endYear: 1087,
+    description: "Duke of Normandy who invaded England in 1066, permanently altering its language, culture, and government.",
+    link: "https://en.wikipedia.org/wiki/William_the_Conqueror",
+    category: "Influential People"
+  },
+  {
+    id: 34,
+    group: 6,
+    title: "Marco Polo",
+    startYear: 1254,
+    endYear: 1324,
+    description: "Venetian merchant and explorer whose travel accounts introduced Europeans to Central Asia and China.",
+    link: "https://en.wikipedia.org/wiki/Marco_Polo",
+    category: "Influential People"
+  },
+  {
+    id: 35,
+    group: 6,
+    title: "Geoffrey Chaucer",
+    startYear: 1340,
+    endYear: 1400,
+    description: "English poet and author of The Canterbury Tales, celebrated as the father of English literature.",
+    link: "https://en.wikipedia.org/wiki/Geoffrey_Chaucer",
+    category: "Influential People"
+  },
+  {
+    id: 36,
+    group: 6,
+    title: "Joan of Arc",
+    startYear: 1412,
+    endYear: 1431,
+    description: "Military leader and national heroine of France who rallied French forces during the Hundred Years' War.",
+    link: "https://en.wikipedia.org/wiki/Joan_of_Arc",
+    category: "Influential People"
+  },
+  {
+    id: 37,
+    group: 6,
+    title: "Johannes Gutenberg",
+    startYear: 1400,
+    endYear: 1468,
+    description: "German craftsman who invented the movable-type printing press, sparking the print revolution.",
+    link: "https://en.wikipedia.org/wiki/Johannes_Gutenberg",
+    category: "Influential People"
+  },
+  {
+    id: 38,
+    group: 6,
+    title: "Leonardo da Vinci",
+    startYear: 1452,
+    endYear: 1519,
+    description: "Italian polymath of the High Renaissance, renowned as a painter, inventor, scientist, and anatomist.",
+    link: "https://en.wikipedia.org/wiki/Leonardo_da_Vinci",
+    category: "Influential People"
+  },
+  {
+    id: 39,
+    group: 6,
+    title: "Christopher Columbus",
+    startYear: 1451,
+    endYear: 1506,
+    description: "Genoese explorer whose 1492 voyage initiated sustained European contact with the Americas.",
+    link: "https://en.wikipedia.org/wiki/Christopher_Columbus",
+    category: "Influential People"
+  },
+  {
+    id: 40,
+    group: 6,
+    title: "Niccolò Machiavelli",
+    startYear: 1469,
+    endYear: 1527,
+    description: "Italian diplomat and political philosopher whose treatise The Prince laid groundwork for modern political science.",
+    link: "https://en.wikipedia.org/wiki/Niccol%C3%B2_Machiavelli",
+    category: "Influential People"
+  },
+  {
+    id: 41,
+    group: 6,
+    title: "Nicolaus Copernicus",
+    startYear: 1473,
+    endYear: 1543,
+    description: "Renaissance mathematician and astronomer who formulated the heliocentric model placing the Sun at the center of the universe.",
+    link: "https://en.wikipedia.org/wiki/Nicolaus_Copernicus",
+    category: "Influential People"
+  },
+  {
+    id: 42,
+    group: 6,
+    title: "Michelangelo",
+    startYear: 1475,
+    endYear: 1564,
+    description: "Italian sculptor, painter, and architect of the High Renaissance, celebrated for masterworks like the Sistine Chapel ceiling and David.",
+    link: "https://en.wikipedia.org/wiki/Michelangelo",
+    category: "Influential People"
+  },
+  {
+    id: 43,
+    group: 6,
+    title: "Hernán Cortés",
+    startYear: 1485,
+    endYear: 1547,
+    description: "Spanish conquistador who led the expedition that caused the fall of the Aztec Empire.",
+    link: "https://en.wikipedia.org/wiki/Hern%C3%A1n_Cort%C3%A9s",
+    category: "Influential People"
+  },
+  {
+    id: 44,
+    group: 6,
+    title: "Martin Luther",
+    startYear: 1483,
+    endYear: 1546,
+    description: "German theologian whose 95 Theses sparked the Protestant Reformation.",
+    link: "https://en.wikipedia.org/wiki/Martin_Luther",
+    category: "Influential People"
+  },
+  {
+    id: 45,
+    group: 6,
+    title: "Elizabeth I of England",
+    startYear: 1533,
+    endYear: 1603,
+    description: "Queen of England and Ireland whose reign marked the Golden Age of the English Renaissance.",
+    link: "https://en.wikipedia.org/wiki/Elizabeth_I",
+    category: "Influential People"
+  },
+  {
+    id: 46,
+    group: 6,
+    title: "William Shakespeare",
+    startYear: 1564,
+    endYear: 1616,
+    description: "English playwright, poet, and actor widely regarded as the greatest writer in the English language.",
+    link: "https://en.wikipedia.org/wiki/William_Shakespeare",
+    category: "Influential People"
+  },
+  {
+    id: 47,
+    group: 6,
+    title: "Galileo Galilei",
+    startYear: 1564,
+    endYear: 1642,
+    description: "Italian astronomer and physicist whose telescopic observations advanced the scientific revolution.",
+    link: "https://en.wikipedia.org/wiki/Galileo_Galilei",
+    category: "Influential People"
+  },
+  {
+    id: 48,
+    group: 6,
+    title: "René Descartes",
+    startYear: 1596,
+    endYear: 1650,
+    description: "French philosopher, mathematician, and writer dubbed the father of modern Western philosophy.",
+    link: "https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes",
+    category: "Influential People"
+  },
+  {
+    id: 49,
+    group: 6,
+    title: "Isaac Newton",
+    startYear: 1643,
+    endYear: 1727,
+    description: "English mathematician and physicist who formulated the laws of motion and universal gravitation.",
+    link: "https://en.wikipedia.org/wiki/Isaac_Newton",
+    category: "Influential People"
+  },
+  {
+    id: 50,
+    group: 6,
+    title: "Voltaire",
+    startYear: 1694,
+    endYear: 1778,
+    description: "French Enlightenment writer and philosopher known for his wit, advocacy of freedom of speech, and criticism of religious dogma.",
+    link: "https://en.wikipedia.org/wiki/Voltaire",
+    category: "Influential People"
+  },
+  {
+    id: 51,
+    group: 6,
+    title: "Benjamin Franklin",
+    startYear: 1706,
+    endYear: 1790,
+    description: "American polymath, Founding Father, printer, and scientist renowned for his discoveries in electricity.",
+    link: "https://en.wikipedia.org/wiki/Benjamin_Franklin",
+    category: "Influential People"
+  },
+  {
+    id: 52,
+    group: 6,
+    title: "George Washington",
+    startYear: 1732,
+    endYear: 1799,
+    description: "Commander-in-Chief of the Continental Army and the first President of the United States.",
+    link: "https://en.wikipedia.org/wiki/George_Washington",
+    category: "Influential People"
+  },
+  {
+    id: 53,
+    group: 6,
+    title: "Napoleon Bonaparte",
+    startYear: 1769,
+    endYear: 1821,
+    description: "French military commander and emperor who conquered much of Europe in the early 19th century.",
+    link: "https://en.wikipedia.org/wiki/Napoleon",
+    category: "Influential People"
+  },
+  {
+    id: 54,
+    group: 6,
+    title: "Abraham Lincoln",
+    startYear: 1809,
+    endYear: 1865,
+    description: "16th President of the United States who led the nation through the American Civil War and abolished slavery.",
+    link: "https://en.wikipedia.org/wiki/Abraham_Lincoln",
+    category: "Influential People"
+  }
+];
+
 export default function MusicHistoryTimeline() {
   // --- STATE ---
   const [bounds, setBounds] = useState({ startYear: 400, endYear: 2000 });
@@ -19,12 +531,17 @@ export default function MusicHistoryTimeline() {
   const [isMobile, setIsMobile] = useState(false);
   const [showControls, setShowControls] = useState(false);
   
+  // Wikipedia integration state
+  const [wikiSuggestion, setWikiSuggestion] = useState(null);
+  const [isSearchingWiki, setIsSearchingWiki] = useState(false);
+  
   const [groupColors, setGroupColors] = useState({
     1: '#6c757d', // Eras 
-    2: '#007bff', // People 
+    2: '#007bff', // Musicians 
     3: '#28a745', // Musical Events 
     4: '#dc3545', // World Events 
-    5: '#17a2b8'  // Other 
+    5: '#17a2b8', // Other 
+    6: '#6f42c1'  // Influential People
   });
 
   const [hiddenGroups, setHiddenGroups] = useState([]);
@@ -32,9 +549,10 @@ export default function MusicHistoryTimeline() {
 
   const groups = [
     { id: 1, title: 'Eras' },
-    { id: 2, title: 'People' },
+    { id: 2, title: 'Musicians' },
     { id: 3, title: 'Musical Events' },
     { id: 4, title: 'World Events' },
+    { id: 6, title: 'Influential People' },
     { id: 5, title: 'Other' }
   ];
 
@@ -61,7 +579,7 @@ export default function MusicHistoryTimeline() {
         console.error("Failed to parse saved timeline data.");
       }
     }
-    return defaultItems;
+    return [...defaultItems, ...defaultEvents];
   });
 
   // --- AUTO-SAVE TO LOCAL STORAGE ---
@@ -92,7 +610,7 @@ export default function MusicHistoryTimeline() {
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
-    setHasUnsavedChanges(false); // Clear the warning after successful download
+    setHasUnsavedChanges(false);
   };
 
   const handleFileUpload = (e) => {
@@ -112,7 +630,43 @@ export default function MusicHistoryTimeline() {
       }
     };
     reader.readAsText(file);
-    e.target.value = ''; // Reset input so the same file can be uploaded again if needed
+    e.target.value = '';
+  };
+
+  // --- WIKIPEDIA SEARCH HELPER ---
+  const handleSearchWikipedia = async () => {
+    if (!formData.title.trim()) {
+      alert("Please enter an event or person title first!");
+      return;
+    }
+    setIsSearchingWiki(true);
+    setWikiSuggestion(null);
+
+    try {
+      const query = encodeURIComponent(formData.title.trim());
+      const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&origin=*`);
+      const data = await response.json();
+
+      if (data.query && data.query.search && data.query.search.length > 0) {
+        const topResult = data.query.search[0];
+        const wikiTitle = topResult.title;
+        const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(wikiTitle.replace(/ /g, '_'))}`;
+        const cleanSnippet = topResult.snippet.replace(/<\/?[^>]+(>|$)/g, "");
+
+        setWikiSuggestion({
+          title: wikiTitle,
+          url: wikiUrl,
+          snippet: cleanSnippet
+        });
+      } else {
+        alert("No matching Wikipedia article found.");
+      }
+    } catch (error) {
+      console.error("Failed to query Wikipedia:", error);
+      alert("Could not connect to Wikipedia search.");
+    } finally {
+      setIsSearchingWiki(false);
+    }
   };
 
   // --- LOGIC & MATH ---
@@ -204,6 +758,7 @@ export default function MusicHistoryTimeline() {
     setItems([...items, newItem]);
     setHasUnsavedChanges(true);
     setFormData({ title: '', startYear: '', endYear: '', description: '', link: '', group: '2' });
+    setWikiSuggestion(null); // Clear suggestion on submit
   };
 
   const handleEditSubmit = (e) => {
@@ -223,7 +778,6 @@ export default function MusicHistoryTimeline() {
   };
 
   // --- STRICT STYLES ---
-  // Headers shrink slightly on mobile to allow more canvas space
   const headerColumnStyle = {
     width: isMobile ? '80px' : '120px', 
     minWidth: isMobile ? '80px' : '120px', 
@@ -424,8 +978,6 @@ export default function MusicHistoryTimeline() {
 
                     if (item.endYear < visibleStart || item.startYear > visibleEnd) return null;
 
-                    // DYNAMIC TEXT LOGIC: If a block takes up less than the threshold of the visible screen, the text pops outside
-                    // Mobile screens are smaller, so they need a larger percentage threshold (15%) than desktop (8%) before text overflows
                     const textThreshold = isMobile ? 15 : 8;
                     const isNarrow = isPoint || widthPercent < textThreshold;
 
@@ -551,11 +1103,66 @@ export default function MusicHistoryTimeline() {
           </div>
         )}
 
-        {/* --- INPUT FORM --- */}
-        <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px', maxWidth: isMobile ? '100%' : '500px' }}>
+        {/* --- INPUT FORM WITH WIKIPEDIA INTEGRATION --- */}
+        <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px', maxWidth: isMobile ? '100%' : '500px', backgroundColor: '#fdfdfd' }}>
           <h3>Add Timeline Event</h3>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <input type="text" name="title" placeholder="Event Title (Required)" required value={formData.title} onChange={handleInputChange} style={{ padding: '8px' }} />
+            
+            {/* Title & Wikipedia Search Button Row */}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input 
+                type="text" 
+                name="title" 
+                placeholder="Event Title (Required)" 
+                required 
+                value={formData.title} 
+                onChange={handleInputChange} 
+                style={{ padding: '8px', flexGrow: 1 }} 
+              />
+              <button 
+                type="button" 
+                onClick={handleSearchWikipedia}
+                disabled={isSearchingWiki}
+                style={{ padding: '8px 12px', backgroundColor: '#17a2b8', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', whiteSpace: 'nowrap' }}
+              >
+                {isSearchingWiki ? 'Searching...' : '🔍 Search Wiki'}
+              </button>
+            </div>
+
+            {/* Wikipedia Suggestion Prompt Box */}
+            {wikiSuggestion && (
+              <div style={{ backgroundColor: '#e7f3ff', border: '1px solid #b3d7ff', padding: '12px', borderRadius: '6px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div>
+                  <strong>Found Wikipedia Match:</strong> {wikiSuggestion.title}
+                </div>
+                <div style={{ color: '#555', lineHeight: '1.4' }}>
+                  {wikiSuggestion.snippet}...
+                </div>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        link: wikiSuggestion.url,
+                        description: prev.description ? prev.description : wikiSuggestion.snippet
+                      }));
+                      setWikiSuggestion(null);
+                    }}
+                    style={{ padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                  >
+                    ✓ Yes, Apply Link & Summary
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setWikiSuggestion(null)}
+                    style={{ padding: '5px 10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
             
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <label style={{ fontSize: '13px', marginBottom: '4px' }}>Category (Required):</label>
