@@ -633,6 +633,17 @@ export default function MusicHistoryTimeline() {
     e.target.value = '';
   };
 
+  const handleReset = () => {
+    if (window.confirm("Are you sure you want to reset your timeline? This will erase any of your custom events and restore the default timeline.")) {
+      // 1. Wipe the local storage
+      localStorage.removeItem('music_timeline_data');
+      // 2. Reset the live state back to your default arrays
+      setItems([...defaultItems, ...defaultEvents]);
+      // 3. Clear the unsaved changes warning
+      setHasUnsavedChanges(false);
+    }
+  };
+
   // --- WIKIPEDIA SEARCH HELPER ---
   const handleSearchWikipedia = async () => {
     if (!formData.title.trim()) {
@@ -814,6 +825,13 @@ export default function MusicHistoryTimeline() {
 
           <button onClick={handleExport} style={{ width: '100%', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
             💾 Save & Download File
+          </button>
+          
+          <button 
+            onClick={handleReset} 
+            style={{ width: '100%', padding: '10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '10px' }}
+          >
+            ⚠️ Reset to Defaults
           </button>
           
           {hasUnsavedChanges && (
