@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
@@ -531,6 +531,11 @@ export default function MusicHistoryTimeline() {
   const [isMobile, setIsMobile] = useState(false);
   const [showControls, setShowControls] = useState(false);
   
+  // Timeline Ref for swipe-to-pan calculation
+  const timelineRef = useRef(null);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [initialStart, setInitialStart] = useState(0);
+
   // Wikipedia integration state
   const [wikiSuggestion, setWikiSuggestion] = useState(null);
   const [isSearchingWiki, setIsSearchingWiki] = useState(false);
@@ -635,11 +640,8 @@ export default function MusicHistoryTimeline() {
 
   const handleReset = () => {
     if (window.confirm("Are you sure you want to reset your timeline? This will erase any of your custom events and restore the default timeline.")) {
-      // 1. Wipe the local storage
       localStorage.removeItem('music_timeline_data');
-      // 2. Reset the live state back to your default arrays
       setItems([...defaultItems, ...defaultEvents]);
-      // 3. Clear the unsaved changes warning
       setHasUnsavedChanges(false);
     }
   };
@@ -693,6 +695,35 @@ export default function MusicHistoryTimeline() {
     setVisibleEnd(Math.min(bounds.endYear, center + half));
   };
 
+  // --- SWIPE TO PAN LOGIC ---
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+    setInitialStart(visibleStart);
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartX === null || !timelineRef.current) return;
+    const currentX = e.touches[0].clientX;
+    const diffX = touchStartX - currentX; // positive = swiping left (forward in time)
+    
+    const containerWidth = timelineRef.current.offsetWidth;
+    const yearsDiff = (diffX / containerWidth) * windowSize;
+    
+    let newStart = initialStart + yearsDiff;
+    const maxStart = bounds.endYear - windowSize;
+    
+    // Enforce bounds smoothly while swiping
+    if (newStart < bounds.startYear) newStart = bounds.startYear;
+    if (newStart > maxStart) newStart = maxStart;
+
+    setVisibleStart(newStart);
+    setVisibleEnd(newStart + windowSize);
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStartX(null);
+  };
+
   const toggleGroupVisibility = (groupId) => {
     if (hiddenGroups.includes(groupId)) setHiddenGroups(hiddenGroups.filter(id => id !== groupId));
     else setHiddenGroups([...hiddenGroups, groupId]);
@@ -723,10 +754,14 @@ export default function MusicHistoryTimeline() {
     const lanes = [];
     const stackedItems = [];
 
+    // MODIFIED FOR MOBILE: Characters take up more visual width on smaller screens, 
+    // so we multiply the length to force items into new lanes instead of overlapping.
+    const charMultiplier = isMobile ? 2.5 : 0.9;
+
     sorted.forEach(item => {
       const isEra = item.group === 1;
 
-      const textWidthPercent = (item.title?.length || 0) * 0.9;
+      const textWidthPercent = (item.title?.length || 0) * charMultiplier;
       const textWidthYears = (textWidthPercent / 100) * windowSize;
       
       const visualEndYear = Math.max(item.endYear, item.startYear + textWidthYears);
@@ -854,7 +889,23 @@ export default function MusicHistoryTimeline() {
         {/* --- CONTROLS (Hidden on Mobile unless toggled) --- */}
         {(!isMobile || showControls) && (
           <>
-            {/* Bounds & Navigation Panel */}
+            {/* Timelines (Visibility & Color Settings) MOVED UP */}
+            <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px' }}>
+              <h4 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Timelines</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {groups.map(g => (
+                  <div key={g.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', flexGrow: 1 }}>
+                      <input type="checkbox" checked={!hiddenGroups.includes(g.id)} onChange={() => toggleGroupVisibility(g.id)} />
+                      {g.title}
+                    </label>
+                    <input type="color" value={groupColors[g.id]} onChange={(e) => setGroupColors({ ...groupColors, [g.id]: e.target.value })} style={{ cursor: 'pointer', border: 'none', padding: 0, width: '22px', height: '22px', borderRadius: '3px' }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bounds & Navigation Panel MOVED DOWN (closer to timeline canvas) */}
             <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px' }}>
               <h4 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Navigator</h4>
               
@@ -906,22 +957,6 @@ export default function MusicHistoryTimeline() {
                 </div>
               </div>
             </div>
-
-            {/* Timelines (Visibility & Color Settings) */}
-            <div style={{ backgroundColor: '#f8f9fa', border: '1px solid #ddd', borderRadius: '6px', padding: '15px' }}>
-              <h4 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Timelines</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {groups.map(g => (
-                  <div key={g.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', flexGrow: 1 }}>
-                      <input type="checkbox" checked={!hiddenGroups.includes(g.id)} onChange={() => toggleGroupVisibility(g.id)} />
-                      {g.title}
-                    </label>
-                    <input type="color" value={groupColors[g.id]} onChange={(e) => setGroupColors({ ...groupColors, [g.id]: e.target.value })} style={{ cursor: 'pointer', border: 'none', padding: 0, width: '22px', height: '22px', borderRadius: '3px' }} />
-                  </div>
-                ))}
-              </div>
-            </div>
           </>
         )}
       </div>
@@ -932,7 +967,13 @@ export default function MusicHistoryTimeline() {
       <div style={{ width: '100%', flex: '1 1 0%', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
         
         {/* --- THE CUSTOM TIMELINE --- */}
-        <div style={{ border: '2px solid #aaa', borderRadius: '4px', backgroundColor: '#fff', position: 'relative' }}>
+        <div 
+          ref={timelineRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{ border: '2px solid #aaa', borderRadius: '4px', backgroundColor: '#fff', position: 'relative', touchAction: 'pan-y' }}
+        >
           
           {/* Years Header Grid */}
           <div style={{ display: 'flex', height: '30px', borderBottom: '2px solid #aaa', backgroundColor: '#343a40', color: 'white' }}>
@@ -941,7 +982,7 @@ export default function MusicHistoryTimeline() {
               {getGridMarkers().map(year => {
                 const leftPercent = ((year - visibleStart) / windowSize) * 100;
                 return (
-                  <div key={year} style={{ position: 'absolute', left: `${leftPercent}%`, top: 0, bottom: 0, borderLeft: '1px solid #666', paddingLeft: '4px', fontSize: '12px', paddingTop: '6px' }}>
+                  <div key={year} style={{ position: 'absolute', left: `${leftPercent}%`, top: 0, bottom: 0, borderLeft: '1px solid #666', paddingLeft: '4px', fontSize: '12px', paddingTop: '6px', pointerEvents: 'none' }}>
                     {year}
                   </div>
                 );
@@ -982,7 +1023,7 @@ export default function MusicHistoryTimeline() {
                   
                   {/* Background vertical grid lines */}
                   {getGridMarkers().map(year => (
-                    <div key={year} style={{ position: 'absolute', left: `${((year - visibleStart) / windowSize) * 100}%`, top: 0, bottom: 0, borderLeft: '1px solid #f0f0f0', zIndex: 0 }} />
+                    <div key={year} style={{ position: 'absolute', left: `${((year - visibleStart) / windowSize) * 100}%`, top: 0, bottom: 0, borderLeft: '1px solid #f0f0f0', zIndex: 0, pointerEvents: 'none' }} />
                   ))}
 
                   {/* Event Blocks */}
